@@ -33,8 +33,8 @@ function App() {
         ]
       }
     ],
-    keyUses: [{ title: '', description: '' }],
-    comparisons: [{ title: '', description: '' }],
+    keyUses: [{ title: '', descriptionText: '' }],
+    comparisons: [{ title: '', descriptionText: '' }],
     relatedVerbs: [''],
     level: '',
     isPremium: false
@@ -52,7 +52,7 @@ function App() {
   const handleAddComparison = () => {
     setFormData(prevData => ({
       ...prevData,
-      comparisons: [...prevData.comparisons, { title: '', description: '' }]
+      comparisons: [...prevData.comparisons, { title: '', descriptionText: '' }]
     }));
   };
 
@@ -76,7 +76,7 @@ function App() {
   const handleAddKeyUse = () => {
     setFormData(prevData => ({
       ...prevData,
-      keyUses: [...prevData.keyUses, { title: '', description: '' }]
+      keyUses: [...prevData.keyUses, { title: '', descriptionText: '' }]
     }));
   };
 
@@ -301,8 +301,8 @@ function App() {
           <input required
             type="text"
             placeholder="Description"
-            value={use.description}
-            onChange={(e) => handleKeyUseChange(index, 'description', e.target.value)}
+            value={use.descriptionText}
+            onChange={(e) => handleKeyUseChange(index, 'descriptionText', e.target.value)}
           />
           <button
             type="button"
@@ -329,8 +329,8 @@ function App() {
             <input required
               type="text"
               placeholder="Description"
-              value={comparison.description}
-              onChange={(e) => handleComparisonChange(index, 'description', e.target.value)}
+              value={comparison.descriptionText}
+              onChange={(e) => handleComparisonChange(index, 'descriptionText', e.target.value)}
             />
             <button
               type="button"
