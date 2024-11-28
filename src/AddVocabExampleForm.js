@@ -156,7 +156,7 @@ function AddVocabExampleForm() {
             <button type="button" onClick={() => removeInputField('additionalVocabs', index)}>Remove</button>
           </div>
         ))}
-        <button type="button" onClick={() => addInputField('additionalVerbs')}>+</button><br /><br />
+        <button type="button" onClick={() => addInputField('additionalVocabs')}>+</button><br /><br />
 
         <h3>Is Premium:</h3>
         <input style={{ width: "10px !important" }} type="checkbox" name="isPremium" checked={formData.isPremium} onChange={handleChange} /><br /><br />
