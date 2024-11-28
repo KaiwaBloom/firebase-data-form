@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/firebase-data-form/static/css/main.5d9196db.css",
-    "main.js": "/firebase-data-form/static/js/main.66f0b210.js",
+    "main.js": "/firebase-data-form/static/js/main.1916f7aa.js",
     "static/js/453.78e59bc4.chunk.js": "/firebase-data-form/static/js/453.78e59bc4.chunk.js",
     "index.html": "/firebase-data-form/index.html",
     "main.5d9196db.css.map": "/firebase-data-form/static/css/main.5d9196db.css.map",
-    "main.66f0b210.js.map": "/firebase-data-form/static/js/main.66f0b210.js.map",
+    "main.1916f7aa.js.map": "/firebase-data-form/static/js/main.1916f7aa.js.map",
     "453.78e59bc4.chunk.js.map": "/firebase-data-form/static/js/453.78e59bc4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5d9196db.css",
-    "static/js/main.66f0b210.js"
+    "static/js/main.1916f7aa.js"
   ]
 }
