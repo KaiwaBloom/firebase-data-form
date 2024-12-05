@@ -19,14 +19,14 @@ h1, h3, h4 {
 
 input[type="text"] {
   font-size: 15px;
-  width: 500px;
+  width: 600px;
   padding: 5px;
   text-align: start;
 }
 
 textarea {
   font-size: 15px;
-  width: 500px;
+  width: 600px;
   height: 100px;
   padding: 5px;
 }

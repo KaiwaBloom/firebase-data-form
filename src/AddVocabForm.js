@@ -9,15 +9,10 @@ function AddVocabForm() {
     wordJPKanji: '',
     wordEN: '',
     descriptionText: '',
-    structurePositiveForms: [''],
-    structureNegativeForms: [''],
-    otherStructures: [
-      {
-        structureForm: '',
-        examples: [
-          { sentenceJP: '', sentenceEN: '' }
-        ]
-      }
+    structure: '',
+    otherStructureForm: '',
+    otherStructureExamples: [
+      { sentenceJP: '', sentenceEN: '' }
     ],
     keyUses: [{ title: '', descriptionText: '' }],
     comparisons: [{ title: '', descriptionText: '' }],
@@ -111,55 +106,29 @@ function AddVocabForm() {
     });
   };
 
-  const handleStructureChange = (index, value) => {
-    const updatedStructures = [...formData.otherStructures];
-    updatedStructures[index].structureForm = value;
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: updatedStructures
-    }));
+  const handleExampleChange = (exampleIndex, field, value) => {
+    const updatedExamples = [...formData.otherStructureExamples];
+    updatedExamples[exampleIndex][field] = value;
+    setFormData({
+      ...formData,
+      examples: updatedExamples
+    });
   };
 
-  const handleExampleChange = (structureIndex, exampleIndex, field, value) => {
-    const updatedStructures = [...formData.otherStructures];
-    updatedStructures[structureIndex].examples[exampleIndex][field] = value;
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: updatedStructures
-    }));
+  const handleAddExample = () => {
+    const newExample = { sentenceJP: '', sentenceEN: '' }; // Empty example fields
+    setFormData({
+      ...formData,
+      otherStructureExamples: [...formData.otherStructureExamples, newExample]
+    });
   };
 
-  const handleAddStructure = () => {
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: [...prevData.otherStructures, { structureForm: '', examples: [{ sentenceJP: '', sentenceEN: '' }] }]
-    }));
-  };
-
-  const handleRemoveStructure = (index) => {
-    const updatedStructures = formData.otherStructures.filter((_, i) => i !== index);
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: updatedStructures
-    }));
-  };
-
-  const handleAddExample = (index) => {
-    const updatedStructures = [...formData.otherStructures];
-    updatedStructures[index].examples.push({ sentenceJP: '', sentenceEN: '' });
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: updatedStructures
-    }));
-  };
-
-  const handleRemoveExample = (structureIndex, exampleIndex) => {
-    const updatedStructures = [...formData.otherStructures];
-    updatedStructures[structureIndex].examples = updatedStructures[structureIndex].examples.filter((_, i) => i !== exampleIndex);
-    setFormData(prevData => ({
-      ...prevData,
-      otherStructures: updatedStructures
-    }));
+  const handleRemoveExample = (exampleIndex) => {
+    const updatedExamples = formData.otherStructureExamples.filter((_, index) => index !== exampleIndex);
+    setFormData({
+      ...formData,
+      otherStructureExamples: updatedExamples
+    });
   };
 
   const validateForm = () => {
@@ -195,9 +164,9 @@ function AddVocabForm() {
         wordJPKanji: formData.wordJPKanji,
         wordEN: formData.wordEN,
         descriptionText: formData.descriptionText,
-        structurePositiveForms: formData.structurePositiveForms,
-        structureNegativeForms: formData.structureNegativeForms,
-        otherStructures: formData.otherStructures,
+        structure: formData.structure,
+        otherStructureForm: formData.otherStructureForm,
+        otherStructureExamples: formData.otherStructureExamples,
         keyUses: formData.keyUses,
         comparisons: formData.comparisons,
         relatedVerbs: relatedVerbsRefs, // Store as references
@@ -217,6 +186,11 @@ function AddVocabForm() {
     }
   };
 
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setFormError(''); // Clear any existing errors
+  };
+
   return (
     <div style={{ padding: '20px 40px'}}>
       <h1>Add Vocab Data to Firebase</h1>
@@ -224,78 +198,47 @@ function AddVocabForm() {
         <h3>ID:</h3>
         <input required type="text" name="id" value={formData.id} onChange={handleChange} placeholder="001" /><br /><br />
 
-        <h3>Japanese Word:</h3>
+        <h3>日本語（ふりがな付き:</h3>
         <input required type="text" name="wordJP" value={formData.wordJP} onChange={handleChange} /><br /><br />
 
-        <h3>Japanese Word (Kanji):</h3>
+        <h3>日本語(ふりがな無し):</h3>
         <input required type="text" name="wordJPKanji" value={formData.wordJPKanji} onChange={handleChange} /><br /><br />
 
-        <h3>English Word:</h3>
+        <h3>EN translation:</h3>
         <input required type="text" name="wordEN" value={formData.wordEN} onChange={handleChange} /><br /><br />
 
-        <h3>Description:</h3>
+        <h3>Description</h3>
         <textarea required name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea><br /><br />
+        
+        <h3>Verb Structure:</h3>
+        <textarea required name="structure" value={formData.structure} onChange={handleChange}></textarea><br /><br />
 
-        <h3>Structure Positive Forms:</h3>
-        {formData.structurePositiveForms.map((item, index) => (
-          <div key={index}>
+        <h3>Other Structure:</h3>
+        <textarea required name="otherStructureForm" value={formData.otherStructureForm} onChange={handleChange}></textarea><br /><br />
+
+        <h3>Other Structure Examples:</h3>
+        {formData.otherStructureExamples.map((example, exampleIndex) => (
+          <div key={exampleIndex} style={{ marginBottom: '10px' }}>
             <input required
               type="text"
-              value={item}
-              onChange={(e) => handleArrayChange(e, index, 'structurePositiveForms')}
+              placeholder='日本語文'
+              value={example.sentenceJP}
+              onChange={(e) => handleExampleChange(exampleIndex, 'sentenceJP', e.target.value)}
             />
-            <button type="button" onClick={() => removeInputField('structurePositiveForms', index)}>Remove</button>
-          </div>
-        ))}
-        <button type="button" onClick={() => addInputField('structurePositiveForms')}>+</button><br /><br />
-
-        <h3>Structure Negative Forms:</h3>
-        {formData.structureNegativeForms.map((item, index) => (
-          <div key={index}>
+            <br />
             <input required
               type="text"
-              value={item}
-              onChange={(e) => handleArrayChange(e, index, 'structureNegativeForms')}
+              placeholder='英文'
+              value={example.sentenceEN}
+              onChange={(e) => handleExampleChange(exampleIndex, 'sentenceEN', e.target.value)}
             />
-            <button type="button" onClick={() => removeInputField('structureNegativeForms', index)}>Remove</button>
+            <button type="button" onClick={() => handleRemoveExample(exampleIndex)}>Remove Example</button>
           </div>
         ))}
-        <button type="button" onClick={() => addInputField('structureNegativeForms')}>+</button><br /><br />
+        <button type="button" onClick={() => handleAddExample()}>Add Example</button><br /> <br />
 
-        {formData.otherStructures.map((structure, structureIndex) => (
-          <div key={structureIndex} style={{ marginBottom: '20px' }}>
-            <h3>Other Structure {structureIndex + 1}:</h3>
-            <label>Structure Form:</label>
-            <input required
-              type="text"
-              value={structure.structureForm}
-              onChange={(e) => handleStructureChange(structureIndex, e.target.value)}
-            />
-            <h4>Examples:</h4>
-            {structure.examples.map((example, exampleIndex) => (
-              <div key={exampleIndex} style={{ marginBottom: '10px' }}>
-                <label>Sentence JP:</label>
-                <input required
-                  type="text"
-                  value={example.sentenceJP}
-                  onChange={(e) => handleExampleChange(structureIndex, exampleIndex, 'sentenceJP', e.target.value)}
-                />
-                <br />
-                <label>Sentence EN:</label>
-                <input required
-                  type="text"
-                  value={example.sentenceEN}
-                  onChange={(e) => handleExampleChange(structureIndex, exampleIndex, 'sentenceEN', e.target.value)}
-                />
-                <button type="button" onClick={() => handleRemoveExample(structureIndex, exampleIndex)}>Remove Example</button>
-              </div>
-            ))}
-            <button type="button" onClick={() => handleAddExample(structureIndex)}>Add Example to Structure {structureIndex+1}</button><br /> <br />
-            <button type="button" onClick={() => handleRemoveStructure(structureIndex)}>Remove Structure {structureIndex+1}</button>
-          </div>
-        ))}
-        <button type="button" onClick={handleAddStructure}>Add New Other Structure</button>
-        <br /><br />
+        <h3>Level:</h3>
+        <input required type="text" name="level" value={formData.level} onChange={handleChange} /><br /><br />
 
         <h3>Key Uses:</h3>
         {formData.keyUses.map((use, index) => (
@@ -305,8 +248,8 @@ function AddVocabForm() {
             placeholder="Title"
             value={use.title}
             onChange={(e) => handleKeyUseChange(index, 'title', e.target.value)}
-          />
-          <input required
+          /><br/>
+          <textarea required
             type="text"
             placeholder="Description"
             value={use.descriptionText}
@@ -333,8 +276,8 @@ function AddVocabForm() {
               placeholder="Title"
               value={comparison.title}
               onChange={(e) => handleComparisonChange(index, 'title', e.target.value)}
-            />
-            <input required
+            /><br/>
+            <textarea required
               type="text"
               placeholder="Description"
               value={comparison.descriptionText}
@@ -366,15 +309,13 @@ function AddVocabForm() {
         ))}
         <button type="button" onClick={() => addInputField('relatedVerbs')}>+</button><br /><br />
 
-        <h3>Level:</h3>
-        <input required type="text" name="level" value={formData.level} onChange={handleChange} /><br /><br />
-
-        <h3>Is Premium:</h3>
+        <h3>プレミアム会員専用単語:</h3>
         <input style={{ width: "10px !important" }} type="checkbox" name="isPremium" checked={formData.isPremium} onChange={handleChange} /><br /><br />
 
         {formError && <p style={{ color: 'red' }}>{formError}</p>}
 
         <button type="submit" disabled={isSubmitting}>Submit</button>
+        <button type="button" onClick={resetForm} disabled={isSubmitting}>Reset</button>
       </form>
     </div>
   );

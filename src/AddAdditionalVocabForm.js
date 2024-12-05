@@ -8,13 +8,11 @@ function AddAdditionalVocabForm() {
     wordJP: '',
     wordEN: '',
     descriptionText: '',
-    structurePositiveForms: [''],
-    structureNegativeForms: [''],
+    structure: '',
     keyUses: [{ title: '', descriptionText: '' }],
     comparisons: [{ title: '', descriptionText: '' }],
     level: '',
-    examples: [{ sentenceEN: '', sentenceJP: '' }],
-    isPremium: false
+    examples: [{ sentenceEN: '', sentenceJP: '' }]
   }
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,32 +74,6 @@ function AddAdditionalVocabForm() {
     }));
   };
 
-  const handleArrayChange = (e, index, arrayName) => {
-    const updatedArray = [...formData[arrayName]];
-    updatedArray[index] = e.target.value;
-    setFormData({
-      ...formData,
-      [arrayName]: updatedArray,
-    });
-  };
-
-  // Add a new input field to an array
-  const addInputField = (arrayName) => {
-    setFormData({
-      ...formData,
-      [arrayName]: [...formData[arrayName], ''],
-    });
-  };
-
-  // Remove an input field from an array
-  const removeInputField = (arrayName, index) => {
-    const updatedArray = formData[arrayName].filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      [arrayName]: updatedArray,
-    });
-  };
-
   const handleExampleChange = (exampleIndex, field, value) => {
     const updatedExamples = [...formData.examples];
     updatedExamples[exampleIndex][field] = value;
@@ -156,16 +128,17 @@ function AddAdditionalVocabForm() {
         wordJP: formData.wordJP,
         wordEN: formData.wordEN,
         descriptionText: formData.descriptionText,
-        structurePositiveForms: formData.structurePositiveForms,
-        structureNegativeForms: formData.structureNegativeForms,
+        structure: formData.structure,
         keyUses: formData.keyUses,
         comparisons: formData.comparisons,
         level: formData.level,
+        examples: formData.examples
       };
 
       // Save the data to Firestore
       await setDoc(doc(collection(db, 'additionalVocabs'), additionalVocabId), dataToSave);
       setFormData(initialFormData);
+      alert("New Additional Vocab Saved")
 
       console.log('Data successfully saved to Firestore!');
     } catch (error) {
@@ -182,40 +155,20 @@ function AddAdditionalVocabForm() {
         <h3>Additional Vocab ID:</h3>
         <input required type="text" name="id" value={formData.id} onChange={handleChange} placeholder="001" /><br /><br />
 
-        <h3>Japanese Word:</h3>
+        <h3>日本語:</h3>
         <input required type="text" name="wordJP" value={formData.wordJP} onChange={handleChange} /><br /><br />
 
-        <h3>English Word:</h3>
+        <h3>EN translation:</h3>
         <input required type="text" name="wordEN" value={formData.wordEN} onChange={handleChange} /><br /><br />
 
         <h3>Description:</h3>
         <textarea required name="descriptionText" value={formData.descriptionText} onChange={handleChange}></textarea><br /><br />
 
-        <h3>Structure Positive Forms:</h3>
-        {formData.structurePositiveForms.map((item, index) => (
-          <div key={index}>
-            <input required
-              type="text"
-              value={item}
-              onChange={(e) => handleArrayChange(e, index, 'structurePositiveForms')}
-            />
-            <button type="button" onClick={() => removeInputField('structurePositiveForms', index)}>Remove</button>
-          </div>
-        ))}
-        <button type="button" onClick={() => addInputField('structurePositiveForms')}>+</button><br /><br />
+        <h3>Verb Structure:</h3>
+        <textarea required name="structure" value={formData.structure} onChange={handleChange}></textarea><br /><br />
 
-        <h3>Structure Negative Forms:</h3>
-        {formData.structureNegativeForms.map((item, index) => (
-          <div key={index}>
-            <input required
-              type="text"
-              value={item}
-              onChange={(e) => handleArrayChange(e, index, 'structureNegativeForms')}
-            />
-            <button type="button" onClick={() => removeInputField('structureNegativeForms', index)}>Remove</button>
-          </div>
-        ))}
-        <button type="button" onClick={() => addInputField('structureNegativeForms')}>+</button><br /><br />
+        <h3>Level:</h3>
+        <input required type="text" name="level" value={formData.level} onChange={handleChange} /><br /><br />
 
         <h3>Key Uses:</h3>
         {formData.keyUses.map((use, index) => (
@@ -225,8 +178,8 @@ function AddAdditionalVocabForm() {
             placeholder="Title"
             value={use.title}
             onChange={(e) => handleKeyUseChange(index, 'title', e.target.value)}
-          />
-          <input required
+          /><br/>
+          <textarea required
             type="text"
             placeholder="Description"
             value={use.descriptionText}
@@ -253,8 +206,8 @@ function AddAdditionalVocabForm() {
               placeholder="Title"
               value={comparison.title}
               onChange={(e) => handleComparisonChange(index, 'title', e.target.value)}
-            />
-            <input required
+            /><br/>
+            <textarea required
               type="text"
               placeholder="Description"
               value={comparison.descriptionText}
@@ -272,9 +225,6 @@ function AddAdditionalVocabForm() {
         <button type="button" onClick={handleAddComparison}>
           Add Comparison
         </button><br /><br />
-
-        <h3>Level:</h3>
-        <input required type="text" name="level" value={formData.level} onChange={handleChange} /><br /><br />
 
         <h4>Examples:</h4>
         {formData.examples.map((example, exampleIndex) => (
