@@ -123,17 +123,23 @@ function AddAdditionalVocabForm() {
       const additionalVocabId = "A" + formData.id;
 
       // Prepare the data for Firebase
-      const dataToSave = {
+      let dataToSave = {
         id: additionalVocabId,
         wordJP: formData.wordJP,
         wordEN: formData.wordEN,
         descriptionText: formData.descriptionText,
         structure: formData.structure,
-        keyUses: formData.keyUses,
-        comparisons: formData.comparisons,
         level: formData.level,
         examples: formData.examples
       };
+
+      if (formData.keyUses.length > 0) {
+        dataToSave.keyUses = formData.keyUses;
+      }
+
+      if (formData.comparisons.length > 0) {
+        dataToSave.comparisons = formData.comparisons;
+      }
 
       // Save the data to Firestore
       await setDoc(doc(collection(db, 'additionalVocabs'), additionalVocabId), dataToSave);

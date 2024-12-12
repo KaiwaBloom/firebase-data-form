@@ -151,28 +151,40 @@ function AddVocabForm() {
     try {
       // Transform relatedVerbs into document references
       const relatedVerbsRefs = formData.relatedVerbs.map((verbId) =>
-        doc(collection(db, 'vocabs'), verbId)
+        doc(collection(db, 'vocabs'), 'V' + verbId)
       );
 
       const vocabId = "V" + formData.id;
       const isPremium = Number(formData.id) > 60;
 
       // Prepare the data for Firebase
-      const dataToSave = {
+      let dataToSave = {
         id: vocabId,
         wordJP: formData.wordJP,
         wordJPKanji: formData.wordJPKanji,
         wordEN: formData.wordEN,
         descriptionText: formData.descriptionText,
         structure: formData.structure,
-        otherStructureForm: formData.otherStructureForm,
-        otherStructureExamples: formData.otherStructureExamples,
-        keyUses: formData.keyUses,
-        comparisons: formData.comparisons,
-        relatedVerbs: relatedVerbsRefs, // Store as references
         level: formData.level,
-        isPremium: isPremium // Store as a boolean
+        isPremium: isPremium
       };
+
+      if (formData.otherStructureForm.trim() !== "") {
+        dataToSave.otherStructureForm = formData.otherStructureForm;
+        dataToSave.otherStructureExamples = formData.otherStructureExamples;
+      }
+
+      if (formData.keyUses.length > 0) {
+        dataToSave.keyUses = formData.keyUses;
+      }
+
+      if (formData.comparisons.length > 0) {
+        dataToSave.comparisons = formData.comparisons;
+      }
+
+      if (formData.relatedVerbs.length > 0) {
+        dataToSave.relatedVerbs = relatedVerbsRefs;
+      }
 
       // Save the data to Firestore
       await setDoc(doc(collection(db, 'vocabs'), vocabId), dataToSave);
@@ -214,7 +226,7 @@ function AddVocabForm() {
         <textarea required name="structure" value={formData.structure} onChange={handleChange}></textarea><br /><br />
 
         <h3>Other Structure:</h3>
-        <textarea required name="otherStructureForm" value={formData.otherStructureForm} onChange={handleChange}></textarea><br /><br />
+        <textarea name="otherStructureForm" value={formData.otherStructureForm} onChange={handleChange}></textarea><br /><br />
 
         <h3>Other Structure Examples:</h3>
         {formData.otherStructureExamples.map((example, exampleIndex) => (
