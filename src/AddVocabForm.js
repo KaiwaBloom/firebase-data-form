@@ -17,8 +17,7 @@ function AddVocabForm() {
     keyUses: [{ title: '', descriptionText: '' }],
     comparisons: [{ title: '', descriptionText: '' }],
     relatedVerbs: [''],
-    level: '',
-    isPremium: false
+    level: ''
   }
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -156,6 +155,7 @@ function AddVocabForm() {
       );
 
       const vocabId = "V" + formData.id;
+      const isPremium = Number(formData.id) > 60;
 
       // Prepare the data for Firebase
       const dataToSave = {
@@ -171,7 +171,7 @@ function AddVocabForm() {
         comparisons: formData.comparisons,
         relatedVerbs: relatedVerbsRefs, // Store as references
         level: formData.level,
-        isPremium: formData.isPremium, // Store as a boolean
+        isPremium: isPremium // Store as a boolean
       };
 
       // Save the data to Firestore
@@ -308,9 +308,6 @@ function AddVocabForm() {
           </div>
         ))}
         <button type="button" onClick={() => addInputField('relatedVerbs')}>+</button><br /><br />
-
-        <h3>プレミアム会員専用単語:</h3>
-        <input style={{ width: "10px !important" }} type="checkbox" name="isPremium" checked={formData.isPremium} onChange={handleChange} /><br /><br />
 
         {formError && <p style={{ color: 'red' }}>{formError}</p>}
 

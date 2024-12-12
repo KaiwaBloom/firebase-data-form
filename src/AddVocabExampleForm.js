@@ -10,8 +10,7 @@ function AddVocabExampleForm() {
     sentenceEN: '',
     register: '',
     additionalVocabs: [''],
-    alphabetSelection: '',
-    isPremium: false
+    alphabetSelection: ''
   }
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -89,6 +88,8 @@ function AddVocabExampleForm() {
       const exampleId = "VE" + formData.vocabId + formData.alphabetSelection;
       const vocabId = "V" + formData.vocabId;
 
+      const isPremium = Number(formData.vocabId) > 60;
+
       // Prepare the data for Firebase
       const dataToSave = {
         id: exampleId,
@@ -98,7 +99,7 @@ function AddVocabExampleForm() {
         sentenceEN: formData.sentenceEN,
         register: formData.register,
         additionalVocabs: additionalVocabRefs,
-        isPremium: formData.isPremium
+        isPremium: isPremium
       };
 
       // Save the data to Firestore
@@ -157,9 +158,6 @@ function AddVocabExampleForm() {
           </div>
         ))}
         <button type="button" onClick={() => addInputField('additionalVocabs')}>+</button><br /><br />
-
-        <h3>Is Premium:</h3>
-        <input style={{ width: "10px !important" }} type="checkbox" name="isPremium" checked={formData.isPremium} onChange={handleChange} /><br /><br />
 
         {formError && <p style={{ color: 'red' }}>{formError}</p>}
 
