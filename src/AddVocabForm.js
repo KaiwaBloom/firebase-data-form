@@ -158,32 +158,20 @@ function AddVocabForm() {
       const isPremium = Number(formData.id) > 60;
 
       // Prepare the data for Firebase
-      let dataToSave = {
-        id: vocabId,
-        wordJP: formData.wordJP,
-        wordJPKanji: formData.wordJPKanji,
-        wordEN: formData.wordEN,
-        descriptionText: formData.descriptionText,
-        structure: formData.structure,
-        level: formData.level,
-        isPremium: isPremium
-      };
-
-      if (formData.otherStructureForm.trim() !== "") {
-        dataToSave.otherStructureForm = formData.otherStructureForm;
-        dataToSave.otherStructureExamples = formData.otherStructureExamples;
-      }
-
-      if (formData.keyUses.length > 0) {
-        dataToSave.keyUses = formData.keyUses;
-      }
-
-      if (formData.comparisons.length > 0) {
-        dataToSave.comparisons = formData.comparisons;
-      }
-
-      if (formData.relatedVerbs.length > 0) {
-        dataToSave.relatedVerbs = relatedVerbsRefs;
+      const dataToSave = {
+          id: vocabId,
+          wordJP: formData.wordJP,
+          wordJPKanji: formData.wordJPKanji,
+          wordEN: formData.wordEN,
+          descriptionText: formData.descriptionText,
+          structure: formData.structure,
+          otherStructureForm: formData.otherStructureForm,
+          otherStructureExamples: formData.otherStructureExamples,
+          keyUses: formData.keyUses,
+          comparisons: formData.comparisons,
+          relatedVerbs: relatedVerbsRefs, // Store as references
+          level: formData.level,
+          isPremium: isPremium
       }
 
       // Save the data to Firestore

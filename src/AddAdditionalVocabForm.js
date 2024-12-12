@@ -123,12 +123,14 @@ function AddAdditionalVocabForm() {
       const additionalVocabId = "A" + formData.id;
 
       // Prepare the data for Firebase
-      let dataToSave = {
+      const dataToSave = {
         id: additionalVocabId,
         wordJP: formData.wordJP,
         wordEN: formData.wordEN,
         descriptionText: formData.descriptionText,
         structure: formData.structure,
+        keyUses: formData.keyUses,
+        comparisons: formData.comparisons,
         level: formData.level,
         examples: formData.examples
       };
